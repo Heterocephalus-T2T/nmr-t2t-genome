@@ -17,6 +17,9 @@ Code in separate repositories:
 | Repository | Analysis | Figure | Author |
 |---|---|---|---|
 | [KMCG](https://github.com/Oujiang-Laboratory-Bioinformatics/KMCG) | k-mer multiplicity consensus graph, used to evaluate and curate the assembly | 1 | Oujiang Laboratory |
+| [nmr_t2t_graph_patch](https://github.com/jts/nmr_t2t_graph_patch) | recovery of haplotypes dropped by the assembler in autozygous regions | 1 | Jared Simpson |
+| [nmr_jts_panels](https://github.com/jts/nmr_jts_panels) | figure panels | 2 | Jared Simpson |
+| [ModDotPlotMod](https://github.com/jts/ModDotPlotMod) | modified ModDotPlot required by those panels | 2 | Jared Simpson |
 
 Data:
 
