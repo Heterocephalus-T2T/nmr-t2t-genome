@@ -20,6 +20,7 @@ Code in separate repositories:
 | [nmr_t2t_graph_patch](https://github.com/jts/nmr_t2t_graph_patch) | recovery of haplotypes dropped by the assembler in autozygous regions | 1 | Jared Simpson |
 | [nmr_jts_panels](https://github.com/jts/nmr_jts_panels) | figure panels | 2 | Jared Simpson |
 | [ModDotPlotMod](https://github.com/jts/ModDotPlotMod) | modified ModDotPlot required by those panels | 2 | Jared Simpson |
+| [nf-asseval](https://github.com/alexnater/nf-asseval) | assembly evaluation pipeline | 1 | Alexander Nater |
 
 Data:
 
