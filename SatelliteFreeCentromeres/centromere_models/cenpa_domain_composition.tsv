@@ -1,0 +1,34 @@
+# CENP-A domains: ~/Desktop/Circos/mHetGla1.pri.centromere.cenpa.bed; class per Fig. 2B; manuscript_context from Results text
+# satellite: TRC_1/3/5 monomer GFFs; L1: circos_run/data/repeats.sorted.bed; genes: mHetGla1.1.pri.mikado.only.gff (type=gene)
+chrom	start	end	domain_kb	class	manuscript_context	cen_satellite_pct	L1_pct	gene_body_pct	named_genes_in_domain	named_genes_domain_pm250kb
+chr1	56589012	56816034	227	satellite-free	LINE array	0.0	40.1	1.1	-	Rfx7; Vmn2r120; Vhl; Irak2; Tatdn2; Ghrl; Sec13; Atp2b2
+chr2	43765741	43871438	106	satellite-free	OR cluster	0.0	38.2	0.0	-	Or5l13;Or5l14 x2; Or5l14; Or9m1; Or5j1; Caprin1; Or5as1; Or10ag2;Or10ag57
+chr3	49453049	49558833	106	satellite-free	tandem dup (Camk2d)	21.3	24.1	17.3	Camk2d x2	Camk2d x3; Als2; Mpp4; Tmem237
+chr4	43404080	45429335	2025	satellite	-	98.9	0.0	0.0	-	Zc3h8 x2; Insl6; Gm53480;Gm57818; Igsf11; Zc3h6
+chr5	32977071	33454613	478	satellite	-	73.8	13.0	0.0	-	Phax x2; Pwwp2a x2; Tulp3; Rhno1; Foxm1; Tex52; Fkbp4; Gm53480;Gm57818
+chr6	45051185	45130161	79	satellite-free	LINE array	0.0	67.6	0.0	-	Net1; Cmtm6; Zfp799;Zfp811;Zfp870;Zfp871; Chst13; Uroc1; Zxdc; Cfap100; Klf15
+chr7	49726247	50058145	332	satellite	-	83.1	16.1	0.0	-	Pdpn; Lrrc38; Lrrc37; Adh5; Metap1
+chr8	58059925	58276486	217	satellite-free	OR cluster	10.2	29.0	0.0	-	Or2t44 x2; Or2aj4;Or2aj5;Or2aj6 x2; Or2l5 x2; Or2t1; Gm53480;Gm57818; Hgsnat; Pomk; Fnta
+chr9	38795418	38948650	153	satellite-free	tandem dup (Ugt2b)	0.0	62.6	11.3	-	Ugt2b36 x2; Ugt2b35 x2; Ugt2b35;Ugt2b36;Ugt2b37;Ugt2b38;Ugt2b5
+chr10	37539536	37807843	268	satellite-free	Cyp450	0.0	67.1	0.0	-	Pdlim1; CYP2C9; Mtf1; Cyp2c55; Hells
+chr11	22419774	22902090	482	satellite	-	90.5	4.2	0.1	-	Mylk3; Orc6; Vps35; Shcbp1; Insl6; Lin54; Cops4; Plac8
+chr12	53088636	53232060	143	satellite-free	tandem dup (Ttpe)	0.0	38.3	0.0	-	Ftl1;Ftl1-ps2; Dach1
+chr13	67042239	67537244	495	satellite-free	tandem dup (Ptgr1)	0.0	23.7	92.9	Ptgr1 x12; Zkscan16; Dnajc25	Ptgr1 x12; Yap1; Insl6; Ecpas; Zkscan16; Dnajc25; Gng10; Shoc1
+chr14	27193526	30193663	3000	satellite	-	92.9	4.0	0.1	Or7a36	Or2aa1; Or11l3; Trim58; Or2w3;Or2w3b; Or7a36; Efhc2
+chr15	16170470	16350714	180	satellite-free	LINE array	0.0	37.3	0.0	-	Or2t29;Or2t43;Or2t46;Or2t47;Or2t48;Or2t49; Dach1
+chr16	21235138	21442013	207	satellite-free	OR cluster	0.0	44.7	3.2	-	Muc16 x2; a
+chr17	7066538	7513278	447	satellite-free	LINE array	0.0	14.3	22.3	Sugt1 x2; Cdhr17	Cdhr17 x2; Sugt1 x2; Hgf
+chr18	11205856	11579054	373	satellite-free	LINE array	0.0	56.3	11.4	Dok6	Rttn; Cd226; Dok6; a
+chr19	0	1584192	1584	satellite-free	OR cluster	0.0	44.0	19.1	Or7a35;Or7a41 x2; Or7a36 x2; Insl6; Vmn2r120; Or7d9; Efhc2; Or7g12;Or7g19	Or7a35;Or7a41 x2; Or7a36 x2; Insl6; Vmn2r120; Or7d9; Efhc2; Or7g12;Or7g19; Or7e173
+chr20	10659234	11382420	723	satellite-free	OR cluster	0.0	20.2	13.3	Or4c15 x3; Or4p19 x2; Or4c104;Or4c29 x2; Or5d18; Or5d14; Or5d40; Or4p7; Or4p18	Or4a39 x7; Olfr1096 x5; Or4c15 x3; Or8w1 x2; Or5d18 x2; Or4p19 x2; Or4c104;Or4c29 x2; Or5d16
+chr21	23024608	24541299	1517	satellite	-	88.2	4.2	7.0	Ulk2 x2	Myocd x3; Ulk2 x2; 1700024J04Rik; Spesp1; Sync
+chr22	28579437	28740782	161	satellite-free	LINE array	0.0	39.4	20.0	Ralyl	Car1 x2; Ralyl; Ifngr1; Lrrcc1; E2f5; Rbis; Car13; Insl6
+chr23	14700084	15611363	911	satellite	-	74.9	11.9	0.2	Il2	C2cd6; Vgll2; a; Il2; Adad1; Bltp1; Mpv17l
+chr24	6751670	7047177	296	satellite-free	LINE array	0.0	21.1	0.0	-	Ush2a; Kctd3; Kcnk2
+chr25	14574	208406	194	satellite-free	LINE array	0.0	58.0	0.1	-	Vmn2r120
+chr26	5629984	6327765	698	satellite-free	tandem dup (Adad1)	0.0	40.6	7.2	Adad1 x2	Adad1 x2; Dact1; D17H6S56E-5;Gm6958; Daam1
+chr27	11006308	11627122	621	satellite	-	89.8	2.3	0.2	-	Gm57830;Zfp966;Zfp967 x2; 2010315B03Rik;2210418O10Rik;3300002I08Rik;4930522L14Rik;AB010352;AI987944;AW146154;B230307C23Rik;D130040H23Rik;EU599041;Gm10033;Gm12586;Gm14288;Gm14295;Gm14296;Gm14305;Gm14308;Gm14322;Gm14325;Gm14326;Gm14391;Gm14393;Gm14399;Gm14410;Gm14419;Gm14428;Gm14434;Gm14444;Gm17353;Gm17768;Gm2004;Gm2007;Gm2026;Gm20385;Gm20939;Gm21814;Gm31255;Gm31526;Gm31714;Gm31793;Gm32856;Gm3325;Gm35315;Gm35588;Gm3604;Gm38396;Gm39469;Gm40035;Gm45871;Gm4631;Gm46425;Gm46426;Gm46427;Gm46430;Gm4724;Gm50598;Gm51425;Gm5165;Gm53057;Gm53216;Gm53348;Gm53660;Gm57735;Gm57808;Gm6710;Gm6712;Gm6871;Gm9631;LOC115486519;LOC115489545;LOC118568338;Platr25;Zfp1001;Zfp1004;Zfp1005;Zfp1006;Zfp1007;Zfp1008;Zfp1009;Zfp1010;Zfp120;Zfp33b;Zfp345;Zfp442;Zfp640;Zfp825;Zfp866;Zfp868;Zfp869;Zfp872;Zfp930;Zfp931;Zfp932;Zfp933;Zfp934;Zfp935;Zfp936;Zfp937;Zfp950;Zfp951;Zfp958;Zfp960;Zfp963;Zfp964;Zfp965;Zfp966;Zfp967;Zfp968;Zfp969;Zfp97;Zfp970;Zfp971;Zfp972;Zfp973;Zfp975;Zfp976;Zfp977;Zfp997;Zfp998;Zfp999; Rasa1
+chr28	9930782	10759785	829	satellite-free	Cyp450	0.0	43.8	36.7	Cyp2b19 x4; Cyp2b23 x2; Gm53480;Gm57818; Gm27179;Syna;Synb; Cyp2b10; Cyp2b13; Rbmx2; Tlk1	Cyp2b19 x4; Hnrnpul1 x2; Axl x2; Cyp2b23 x2; Dmac2; Ceacam1; Erich4; B3gnt8
+chr29	2953060	3334644	382	satellite	-	15.5	1.4	0.0	-	Man2b1
+chrX	58967487	59210736	243	satellite-free	LINE array	2.9	66.5	0.3	Spin4	Zxdb; Spin4; Arhgef9
+chrY	3742866	3948291	205	satellite-free	tandem dup (Awat1, Gfpt2)	0.0	38.5	12.0	-	Plcxd1 x4; Gfpt2 x2; Taf1 x2; Awat1; Prdm9; Scml1; Klb

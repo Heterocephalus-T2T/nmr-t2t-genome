@@ -1,0 +1,28 @@
+# CHM13 v2.0 centromeric satellite annotation v2.1: https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v2.0_censat_v2.1.bed
+# active array = hor_* entries flagged L (live); p/q-side = active array edge to the ct_*(p_arm)/ct_*(q_arm) transition (satellites incl. interspersed ct sequence)
+chrom	active_HOR_array_Mb	p_side_centromeric_region_Mb	q_side_centromeric_region_Mb
+chr1	4.50	0.39	17.71
+chr2	2.34	4.93	3.67
+chr3	4.68	1.40	0.08
+chr4	5.49	0.65	2.24
+chr5	2.56	0.88	1.49
+chr6	2.77	1.07	1.61
+chr7	3.30	4.51	2.99
+chr8	2.11	0.71	2.14
+chr9	2.63	4.83	33.69
+chr10	2.03	1.11	1.78
+chr11	3.35	2.24	0.80
+chr12	2.58	3.62	1.34
+chr13	1.95	acrocentric	2.99
+chr14	2.62	acrocentric	0.96
+chr15	1.02	acrocentric	4.80
+chr16	1.98	3.22	14.43
+chr17	3.59	3.36	0.65
+chr18	4.77	4.62	0.39
+chr19	3.93	5.95	0.65
+chr20	2.17	1.09	8.02
+chr21	0.34	acrocentric	1.11
+chr22	2.92	acrocentric	4.33
+chrX	3.11	0.46	0.32
+chrY	0.32	4.65	2.24
+# median over 19 non-acrocentric chromosomes: array 2.77 Mb, p-side 2.24 Mb, q-side 1.78 Mb
