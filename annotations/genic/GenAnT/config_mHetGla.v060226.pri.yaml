@@ -1,0 +1,57 @@
+sourceDir: "/.mounts/labs/simpsonlab/users/dsokolowski/miniconda3/bin/activate"
+externalDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/external"
+dataDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data"
+
+
+# Parameters describing your assembly + annotation
+outDir: "/scratch3/groups/simpsonlab/dsokolowski/mHetGla1.pri.v060226"
+target: "mHetGla1"
+species: "heterocephalus_glaber"
+
+assemblyFile: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/NMR_genome_assembly/v060226/repeat_mask/mHetGla1.1.pri.cleaned.sm.fa"
+MaskedAssemblyFile: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/NMR_genome_assembly/v060226/repeat_mask/mHetGla1.1.pri.cleaned.sm.fa"
+MaskedAssemblyAnnotation: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/NMR_genome_assembly/v060226/repeat_mask/mHetGla1.1.pri.repeat.simple.bed"
+rnaseqDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/NMR_genome_assembly/v060226/RNAseq"
+isoseqDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/NMR_genome_assembly/ISOseq_fastq/bam_pri/ISOseq_alignment"
+customRef: "FALSE" # is the custom gff a reference to be upgraded. Switch to "TRUE" if it is a reference.
+liftoffRef: "FALSE" # is the gff file from liftOff a reference assembly. Switch to "TRUE" if it is a reference. Note, if you have a custom reference gff then this will be over-written.
+
+# Parameters describing your reference assemblies + annotation
+
+refToga: "mouse"
+TogaDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39" # required to bind to singularity image
+refTogaFa: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39/GCF_000001635.27_GRCm39_genomic.clean.fa" # directory in /data -- adding species can be done with scripts in /utils
+refTogaBed: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39/GCF_000001635.27_GRCm39_genomic.toga.bed"
+refTogaIsoform: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39/GCF_000001635.27_GRCm39_genomic.isoforms.tsv"
+
+refToga2: "none"
+TogaDir2: "" # required to bind to singularity image
+refTogaFa2: "" # directory in /data -- adding species can be done with scripts in /utils
+refTogaBed2: ""
+refTogaIsoform2: ""
+
+
+refLiftOff: "NMR"
+refLiftOffFa: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/HetGlaV2_female/Heterocephalus_glaber_female.Naked_mole-rat_maternal.dna_sm.toplevel.fa" # directory in /data -- adding species can be done with scripts in /utils
+refLiftOffGff: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/HetGlaV2_female/Heterocephalus_glaber_female.Naked_mole-rat_maternal.113.gffread.gff" # directory in /data -- adding species can be done with scripts in /utils
+
+orthofinderFA: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39/GCF_000001635.27_GRCm39_genomic.nostop.protein.faa" # directory name in ~/data
+orthofinderTab: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39/GCF_000001635.27_GRCm39_genomic.table.txt" # directory name in ~/data
+
+# Tool specific parameters
+mirmachineClade: "Glires"
+dfamDB: "rodentia" # change to a different repeatmasker class if desired, e.g., "arthropoda" for insects
+brakerOdbFaa: "Vertebrata.fa" # change to a different odb12 protein set. e.g.,  "Arthropoda.fa" # https://bioinf.uni-greifswald.de/bioinf/partitioned_odb12/Arthropoda.fa.gz to get arthopods
+mikadoScore: "mammalian.yaml" # Use a different scoring file for a different clade "HISTORIC/dmelanogaster_scoring.yaml"
+rnaseqCov: 10
+isoseqCov: 4
+stranded: "FALSE" # Because of the lewin-lab data
+stringtieMerge: "FALSE" # Merging gtf files from each tissue using stringtie --merge. If "FALSE", we use AGAT_merge. AGAT is more lenient, simply concatenating transcript models for each gene and picking the logest model for the representative "gene". We reccomend this for annotations with multiple tissues of ISO-seq data.
+
+# No custom GFF files:
+customGFF: "none" # if not none, then it should be the path to your gff file
+customLiftoff: "none" #  "/scratch2/groups/simpsonlab/dsokolowski/BatSui_Oct9/liftoff/liftoff.gff" # If you ran lifton use here. Path to your liftoff/on GFF file
+customTOGA: "none" # "/scratch2/groups/simpsonlab/dsokolowski/BatSui_Oct9/toga_outr1/BatSui_toga/query_annotation.gtf" # Path to the output of TOGA/TOGA2. Note, we expect the output to be in GFF/GTF file format, not the bed file that TOGA outputs directly. See tutorial docs for conversion.
+customTOGA2: "none" # "/scratch2/groups/simpsonlab/dsokolowski/BatSui_Oct9/toga_outr2/BatSui_toga/query_annotation.gtf" # Path to the output of TOGA/TOGA2. Note, we expect the output to be in GFF/GTF file format, not the bed file that TOGA outputs directly. See tutorial docs for conversion.
+customBraker: "none" # "/scratch2/groups/simpsonlab/dsokolowski/BatSui_Oct9/braker_sr/braker.gtf" # If you ran EviAnn use here
+customStringtie: "none" # "/scratch2/groups/simpsonlab/dsokolowski/BatSui_Oct9/stringtie_out/stringtie.merged.gtf" # If you used any other transcript assembler (e.g., scallop)

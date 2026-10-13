@@ -1,0 +1,24 @@
+sourceDir: "/.mounts/labs/simpsonlab/users/dsokolowski/miniconda3/bin/activate"
+externalDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/external"
+sifDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/AMR_genome_assembly/tools"
+
+outDir: "/scratch3/groups/simpsonlab/dsokolowski/mHetGla3.Dad.v19.12.25"
+
+hap1Fasta: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/NMR_genome_assembly/v230226/mHetGla3.1.pri.cleaned.fa"
+hap2Fasta: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/NMR_genome_assembly/v230226/mHetGla3.1.alt.cleaned.fa"
+
+hifiDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/T2T_assembly/hifi/Dad-NMR"
+ontDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/T2T_assembly/ont/Dad-NMR"
+target: "mHetGla3"
+refToga: "mouse"
+TogaDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39" # required to bind to singularity image
+refTogaFa: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39/GCF_000001635.27_GRCm39_genomic.fna" # directory in /data -- adding species can be done with scripts in /utils
+refTogaBed: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39/GCF_000001635.27_GRCm39_genomic.toga.bed"
+refTogaIsoform: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mmus_GRC39/GCF_000001635.27_GRCm39_genomic.isoforms.tsv"
+
+refLiftOff: "HetGlaT2T"
+refLiftOffFa: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mHetGla1.1.pri/mHetGla1.1.pri.cleaned.fa" # directory in /data -- adding species can be done with scripts in /utils
+refLiftOffGff: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/GenAnT/data/references/mHetGla1.1.pri/mHetGla1.1.pri.cleaned.gff" # directory in /data -- adding species can be done with scripts in /utils
+busco_odb: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/AMR_genome_assembly/tools/rodentia_odb12"
+compleasm_db: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/NMR_genome_assembly/test_NMR_assemblies/local_tests/rodentia_db"
+maskDir: "/.mounts/labs/simpsonlab/users/dsokolowski/projects/NMR_genome_assembly/final/primary_alt/repeat_mask"

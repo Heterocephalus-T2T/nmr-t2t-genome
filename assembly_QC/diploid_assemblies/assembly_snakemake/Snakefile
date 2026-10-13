@@ -1,0 +1,429 @@
+import glob
+from pathlib import Path
+
+HAPS = ["hap1", "hap2"]
+
+wildcard_constraints:
+    hap="hap[12]"
+
+rule all:
+	input:
+		# Flagger
+		config["outDir"] + "/flagger/flagger.done",
+		# Toga
+		expand(config["outDir"] + "/toga.{hap}.done", hap=HAPS),
+		# Annotation + QC rules
+		expand(config["outDir"] + "/{hap}_buscoasm/busco.done", hap=HAPS),
+		expand(config["outDir"] + "/{hap}_compleasm/compleasm.done", hap=HAPS),
+		expand(config["outDir"] + "/{hap}_quast/quast.done", hap=HAPS),
+		expand(config["outDir"] + "/{hap}.liftoff.busco.done", hap=HAPS),
+		expand(config["outDir"] + "/{hap}.biser.done", hap=HAPS),
+		expand(config["outDir"] + "/hifi/{hap}.sort.bam.bai", hap=HAPS),
+		expand(config["outDir"] + "/{hap}_ontflagger/flagger.done", hap=HAPS)
+
+
+def get_fasta_for_hap(wildcards):
+	k=wildcards.hap + "Fasta"
+	return config[k]
+
+
+rule preprocess_data:
+	input:
+		get_fasta_for_hap
+	output:
+		fa=config["outDir"]+"/assembly/{hap}.fa",
+		fai=config["outDir"]+"/assembly/{hap}.fa.fai",
+		mmi=config["outDir"]+"/assembly/{hap}.mmi"
+	threads: 
+		1
+	params:
+		memory_per_thread="12G",
+		extra_cluster_opt="",
+		walltime="20:00:00",
+		outDir=config["outDir"]
+	shell:
+		"""
+		mkdir -p {params.outDir}/assembly
+		cp -r {input} {params.outDir}/assembly/{wildcards.hap}.fa
+		minimap2 -d {params.outDir}/assembly/{wildcards.hap}.mmi {params.outDir}/assembly/{wildcards.hap}.fa
+		samtools faidx {params.outDir}/assembly/{wildcards.hap}.fa
+		"""
+
+rule diploid_mmi:
+	input:
+		fai=config["outDir"] + "/assembly/hap2.fa.fai"
+	output:
+		config["outDir"] + "/assembly/diploid.mmi"
+	threads: 
+		8
+	params:
+		memory_per_thread="12G",
+		extra_cluster_opt="",
+		walltime="20:00:00",
+		outDir=config["outDir"]
+	shell:
+		"""
+		cd {params.outDir}/assembly
+		sed '/^>/ s/$/_hap1/' hap1.fa > hap1.name.fa
+		sed '/^>/ s/$/_hap2/' hap2.fa > hap2.name.fa
+		cat hap1.name.fa hap2.name.fa > diploid.fa
+		samtools faidx diploid.fa
+		minimap2 -t {threads} -d {output} diploid.fa #  indexing
+		"""
+
+rule cat_hifi_fq:
+	input:
+		config["hifiDir"]
+	output:
+		config["outDir"]+"/hifi/cat.done"
+	threads:
+		1  # Request 16 threads for this rule
+	params:
+		memory_per_thread="16G",
+		extra_cluster_opt="",
+		walltime="48:00:00",
+		outDir=config["outDir"]
+	shell:
+		"""
+		mkdir -p {params.outDir}/hifi
+		cat {input}/*.fq.gz > {params.outDir}/hifi/hifi.fq.gz
+		touch {output}
+		"""
+
+rule cat_ont_fq:
+	input:
+		config["ontDir"]
+	output:
+		config["outDir"]+"/ont/ont.done"
+	threads:
+		1  # Request 16 threads for this rule
+	params:
+		memory_per_thread="16G",
+		extra_cluster_opt="",
+		walltime="48:00:00",
+		outDir=config["outDir"]
+	shell:
+		"""
+		mkdir -p {params.outDir}/ont
+		cat {input}/*_r9.4.1*_pass.fastq.gz > {params.outDir}/ont/ont.fq.gz
+		touch {output}
+		"""
+
+rule hifi_aln:
+	input:
+		cat=config["outDir"]+"/hifi/cat.done",
+		fa=config["outDir"]+"/assembly/{hap}.fa",
+		mmi=config["outDir"]+"/assembly/{hap}.mmi"
+	output:
+		config["outDir"]+"/hifi/{hap}.sort.bam.bai"
+	threads:
+		16  # Request 16 threads for this rule
+	params:
+		memory_per_thread="16G",
+		extra_cluster_opt="",
+		walltime="48:00:00",
+		outDir=config["outDir"]
+	shell:
+		"""
+		minimap2 -t {threads} -ax map-hifi {input.mmi} {params.outDir}/hifi/hifi.fq.gz | samtools view -@ {threads} -b | samtools sort -@ {threads} -o {params.outDir}/hifi/{wildcards.hap}.sort.bam
+		samtools index {params.outDir}/hifi/{wildcards.hap}.sort.bam
+		"""
+
+rule ont_aln:
+	input:
+		cat=config["outDir"]+"/ont/ont.done",
+		fa=config["outDir"] + "/assembly/{hap}.fa",
+		fai=config["outDir"] + "/assembly/{hap}.fa.fai",
+		mmi=config["outDir"]+"/assembly/{hap}.mmi"
+	output:
+		config["outDir"]+"/ont/{hap}.ont.sort.bam.bai"
+	threads:
+		16  # Request 16 threads for this rule
+	params:
+		memory_per_thread="16G",
+		extra_cluster_opt="",
+		walltime="48:00:00",
+		outDir=config["outDir"]
+	shell:
+		"""
+		minimap2 -t {threads} -ax map-ont --MD {input.mmi} {params.outDir}/ont/ont.fq.gz | samtools view -@ {threads} -b | samtools sort -@ {threads} -o {params.outDir}/ont/{wildcards.hap}.ont.sort.bam
+
+		samtools index {params.outDir}/ont/{wildcards.hap}.ont.sort.bam
+		"""
+
+rule diploid_align:
+	input:
+		cat=config["outDir"]+"/hifi/cat.done",
+		mmi=config["outDir"] + "/assembly/diploid.mmi"
+	output:
+		config["outDir"]+"/hifi/diploid.sort.bam.bai"
+	threads: 
+		16
+	params:
+		memory_per_thread="16G",
+		extra_cluster_opt="",
+		walltime="60:00:00",
+		outDir=config["outDir"]
+	shell:
+		"""
+		minimap2 -t {threads} -ax map-hifi --MD {input.mmi} {params.outDir}/hifi/hifi.fq.gz | samtools view -@ {threads} -b | samtools sort -@ {threads} -o {params.outDir}/hifi/diploid.sort.bam
+		samtools index {params.outDir}/hifi/diploid.sort.bam
+		"""
+
+rule flagger_hifi:
+	input:
+		bai=config["outDir"]+"/hifi/diploid.sort.bam.bai",
+		mmi=config["outDir"] + "/assembly/diploid.mmi"
+	output:
+		config["outDir"] + "/flagger/flagger.done"
+	threads:
+		16 # Request 16 threads for this rule
+	params:
+		memory_per_thread="16G",
+		extra_cluster_opt="",
+		walltime="72:00:00",
+		outDir=config["outDir"],
+		sifDir=config["sifDir"]
+	shell:
+		"""
+
+		bash scripts/flagger_rule.sh {params.outDir} {params.sifDir} {input.mmi} {threads}
+		touch {output}
+		"""
+
+rule flagger_ont:
+	input:
+		cat=config["outDir"]+"/ont/ont.done",
+		fa=config["outDir"] + "/assembly/{hap}.fa",
+		fai=config["outDir"] + "/assembly/{hap}.fa.fai",
+		mmi=config["outDir"]+"/assembly/{hap}.mmi",
+		bai=config["outDir"]+"/ont/{hap}.ont.sort.bam.bai"
+
+	output:
+		config["outDir"]+"/{hap}_ontflagger/flagger.done"
+	threads:
+		16  # Request 16 threads for this rule
+	params:
+		memory_per_thread="16G",
+		extra_cluster_opt="",
+		walltime="72:00:00",
+		outDir=config["outDir"],
+		sifDir=config["sifDir"]
+	shell:
+		"""
+		
+
+		bash scripts/flagger_rule_ont.sh {params.outDir} {params.sifDir} {input.mmi} {threads} {wildcards.hap} {input.fa} {input.fai}
+		cd {params.outDir}
+
+		touch {output}
+
+		"""
+
+
+rule asm_busco:
+	input:
+		fa=config["outDir"] + "/assembly/{hap}.fa",
+		fai=config["outDir"] + "/assembly/{hap}.fa.fai"
+	output:
+		config["outDir"]+"/{hap}_buscoasm/busco.done"
+	threads:
+		24  # Request 16 threads for this rule
+	params:
+		memory_per_thread="16G",
+		extra_cluster_opt="",
+		walltime="100:00:00",
+		outDir=config["outDir"],
+		busco_odb=config["busco_odb"]
+	shell:
+		"""
+
+		cd {params.outDir}
+		
+		busco --offline -i {input.fa} -o {wildcards.hap}_buscoasm -m genome --lineage_dataset {params.busco_odb} --cpu 24 -f
+
+		touch {output}
+
+		"""
+
+rule compleasm:
+	input:
+		fa=config["outDir"] + "/assembly/{hap}.fa",
+		fai=config["outDir"] + "/assembly/{hap}.fa.fai"
+	output:
+		config["outDir"]+"/{hap}_compleasm/compleasm.done"
+	threads:
+		24  # Request 16 threads for this rule
+	params:
+		memory_per_thread="16G",
+		extra_cluster_opt="",
+		walltime="100:00:00",
+		outDir=config["outDir"],
+		compleasm_db=config["compleasm_db"],
+		sifDir=config["sifDir"]
+	shell:
+		"""
+
+		bash scripts/compleasm_rule.sh {params.outDir} {params.sifDir} {params.compleasm_db} {input.fa} {wildcards.hap} {threads}
+		touch {output}
+
+		"""
+
+rule quast:
+	input:
+		fa=config["outDir"] + "/assembly/{hap}.fa",
+		fai=config["outDir"] + "/assembly/{hap}.fa.fai"
+	output:
+		config["outDir"]+"/{hap}_quast/quast.done"
+	threads:
+		8  # Request 16 threads for this rule
+	params:
+		memory_per_thread="8G",
+		extra_cluster_opt="",
+		walltime="40:00:00",
+		outDir=config["outDir"]
+	shell:
+		"""
+
+		cd {params.outDir}
+
+		quast.py --large -o {params.outDir}/{wildcards.hap}"_quast" {input.fa}
+
+		touch {output}
+
+		"""
+
+rule mask: 
+	input:
+		fa=config["outDir"] + "/assembly/{hap}.fa",
+		fai=config["outDir"] + "/assembly/{hap}.fa.fai"
+	output:
+		fa=config["outDir"] + "/assembly/{hap}.sm.fa",
+		fai=config["outDir"] + "/assembly/{hap}.sm.fa.fai",
+		bed=config["outDir"] + "/{hap}_mask/{hap}.repeat.bed"
+	threads:
+		28 # Request 16 threads for this rule
+	params:
+		memory_per_thread="8G",
+		extra_cluster_opt="",
+		walltime="150:00:00",
+		outDir=config["outDir"],
+		maskDir=config["maskDir"]
+
+	shell:
+		"""
+		
+		bash scripts/run_mask.sh {params.outDir} {wildcards.hap} {params.maskDir} {input.fa} {output.fa} {output.bed} {threads}
+		
+		"""
+
+rule liftoff:
+	input:
+		fa=config["outDir"] + "/assembly/{hap}.fa",
+		fai=config["outDir"] + "/assembly/{hap}.fa.fai"
+	output:
+		config["outDir"] + "/{hap}.liftoff.busco.done" 
+	threads:
+		16
+	params:
+		memory_per_thread="4G",
+		extra_cluster_opt="",
+		walltime="150:00:00",
+		outDir=config["outDir"],
+		refLiftOffGff=config["refLiftOffGff"],
+		refLiftOffFa=config["refLiftOffFa"],
+		busco_odb=config["busco_odb"]
+	shell: 
+		"""
+		
+			cd {params.outDir}
+
+			mkdir -p liftoff.{wildcards.hap} ; cd liftoff.{wildcards.hap}
+			
+			if [ -e "referencegff_db" ]; then
+				echo "referencegff_db exists. Skipping."
+			else
+				# Create the file
+				
+				gffutils-cli create {params.refLiftOffGff} -o referencegff_db
+			fi
+			
+			
+			liftoff -db referencegff_db {input.fa} {params.refLiftOffFa} -o ./{wildcards.hap}.gff -u ./unmapped.{wildcards.hap}.txt -copies
+			
+			gffread {wildcards.hap}.gff -g {input.fa} -y {wildcards.hap}.faa
+
+			busco --offline -i {wildcards.hap}.faa -o {wildcards.hap}_buscoFaa -m protein --lineage_dataset {params.busco_odb} --cpu 16 -f
+
+			touch {output}
+		"""
+
+rule cactus_anno:
+	input:
+		fa=config["outDir"] + "/assembly/{hap}.sm.fa",
+		bed=config["outDir"]+"/{hap}_mask/{hap}.repeat.bed"
+	output:
+		config["outDir"]+"/cactus_aln{hap}/target-to-ref.chain"
+	threads:
+		32
+	params:
+		memory_per_thread="12G",
+		extra_cluster_opt="",
+		walltime="200:00:00",
+
+		outDir=config["outDir"],
+		externalDir=config["externalDir"],
+		target=config["target"],
+		TogaDir=config["TogaDir"],
+		refToga=config["refToga"],
+		refTogaFa=config["refTogaFa"]
+	shell:
+		"""
+		scripts/make_cactus_tree.sh {params.outDir} {params.target} {params.refToga} {params.refTogaFa} {wildcards.hap}
+		scripts/cactus_align_and_chain_sif.sh {params.outDir} {params.externalDir} {params.TogaDir} {params.target} {params.refToga} {wildcards.hap}
+		"""
+
+rule toga_anno:
+	input:
+		config["outDir"]+"/cactus_aln{hap}/target-to-ref.chain"
+	output:
+		config["outDir"]+"/toga.{hap}.done"
+	threads:
+		32
+	params:
+		memory_per_thread="12G",
+		extra_cluster_opt="",
+		walltime="72:00:00",
+
+		outDir=config["outDir"],
+		externalDir=config["externalDir"],       
+		target=config["target"], 
+		refToga=config["refToga"],
+		refTogaBed=config["refTogaBed"],
+		refTogaIsoform=config["refTogaIsoform"]
+	shell: 
+		"""
+		mkdir -p cd {params.outDir}/transcript_selection
+		scripts/run_toga_eval.sh {params.outDir} {params.externalDir} {params.target} {params.refToga} {params.refTogaBed} {params.refTogaIsoform} {wildcards.hap}
+		"""
+
+rule biser:
+	input:
+		fa=config["outDir"] + "/assembly/{hap}.sm.fa",
+		fai=config["outDir"] + "/assembly/{hap}.sm.fa.fai"
+	output:
+		config["outDir"] + "/{hap}.biser.done" 
+	threads:
+		16
+	params:
+		memory_per_thread="8G",
+		extra_cluster_opt="",
+		walltime="150:00:00",
+		outDir=config["outDir"]
+	shell: 
+		"""
+		
+		scripts/run_biser.sh {params.outDir} {wildcards.hap} {threads}
+
+		touch {output}
+		"""
